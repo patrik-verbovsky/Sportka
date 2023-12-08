@@ -1,75 +1,117 @@
-﻿const int pocetTipovanychCisel = 7;
+﻿const int pocetTipovanychCisel = 6;
 const int pocetVyhernichCisel = 7;
 int[] tipovanaCisla = new int[pocetTipovanychCisel];
 int[] vyherneCisla = new int[pocetVyhernichCisel];
 int uhodnutychCisel = 0;
+bool opakovat = true;
 Random random = new Random();
-
-for (int i = 0; i < pocetTipovanychCisel; i++)
+while (opakovat)
 {
-    vyherneCisla[i] = random.Next(1, 49);
-    if (vyherneCisla.Contains(vyherneCisla[i]))
+    for (int n = 0; n < pocetTipovanychCisel; n++)
+    {
+        tipovanaCisla[n] = 0;
+    }
+    for (int n = 0; n < pocetVyhernichCisel; n++)
+    {
+        vyherneCisla[n] = 0;
+    }
+    uhodnutychCisel = 0;
+    for (int i = 0; i < pocetVyhernichCisel; i++)
     {
         vyherneCisla[i] = random.Next(1, 49);
-    }
-}
-
-Console.WriteLine("Sportka");
-Console.WriteLine("===============================");
-for (int i = 0; i < pocetVyhernichCisel; i++)
-{
-    Console.Write("Zadej " + (i+1) + ". číslo v rozsahu 1-49: ");
-    int cislo;
-    bool cisloJeOk = false;
-    while (!cisloJeOk)
-    {
-        if (int.TryParse(Console.ReadLine(), out cislo))
+        if (vyherneCisla.Contains(vyherneCisla[i]))
         {
-            if (cislo >= 1 && cislo <= 49)
+            vyherneCisla[i] = random.Next(1, 49);
+        }
+    }
+
+    Console.WriteLine("Sportka");
+    Console.WriteLine("===============================");
+    for (int i = 0; i < pocetTipovanychCisel; i++)
+    {
+        Console.Write("Zadej " + (i + 1) + ". číslo v rozsahu 1-49: ");
+        int cislo;
+        bool cisloJeOk = false;
+        while (!cisloJeOk)
+        {
+            if (int.TryParse(Console.ReadLine(), out cislo))
             {
-                if (!tipovanaCisla.Contains(cislo))
+                if (cislo >= 1 && cislo <= 49)
                 {
-                    tipovanaCisla[i] = cislo;
-                    cisloJeOk = true;
+                    if (!tipovanaCisla.Contains(cislo))
+                    {
+                        tipovanaCisla[i] = cislo;
+                        cisloJeOk = true;
+                    }
+                    else
+                    {
+                        Console.Write("\nČíslo se opakuje. Zadej znovu: ");
+                    }
                 }
                 else
                 {
-                    Console.Write("\nČíslo se opakuje. Zadej znovu: ");
+                    Console.Write("\nČíslo je mimo rozsah. Zadej znovu: ");
                 }
             }
             else
             {
-                Console.Write("\nČíslo je mimo rozsah. Zadej znovu: ");
+                Console.Write("\nNezadal jsi číslo. Zadej znovu: ");
             }
         }
-        else
+    }
+
+    for (int i = 0; i < pocetTipovanychCisel; i++)
+    {
+        if (vyherneCisla.Contains(tipovanaCisla[i]))
         {
-            Console.Write("\nNezadal jsi číslo. Zadej znovu: ");
+            uhodnutychCisel++;
         }
     }
-}
 
-for (int i = 0; i < pocetTipovanychCisel; i++)
-{
-    if (vyherneCisla.Contains(tipovanaCisla[i]))
+    if (uhodnutychCisel >= 3 && uhodnutychCisel <= 6)
     {
-        uhodnutychCisel++;
+        Console.Clear();
+        Console.WriteLine("Sportka\n============================================");
+        Console.WriteLine("Tipovaná čísla: " + String.Join(", ", tipovanaCisla));
+        Console.WriteLine("Výherní čísla: " + String.Join(", ", vyherneCisla));
+        Console.WriteLine("\nUhodnul jsi " + uhodnutychCisel + "/6 čísel.\n");
+        Console.WriteLine("Gratuluji, vyhrál jsi Sportku o 1 milión Kč!\n\nChceš hrát znova? (a/n): ");
+        string odpoved = Console.ReadLine();
+        string converted_odpoved = odpoved.ToUpper();
+        if (converted_odpoved == "A")
+        {
+            opakovat = true;
+            Console.WriteLine("Spouštím ti novou hru...");
+            Console.Clear();
+        }
+        else if (converted_odpoved == "N")
+        {
+            opakovat = false;
+            Console.WriteLine("Vypínám hru...");
+            Console.Clear();
+        }
     }
-}
-
-if (uhodnutychCisel >= 3 && uhodnutychCisel <= 7)
-{
-    Console.Clear();
-    Console.WriteLine("Sportka\n============================================");
-    Console.WriteLine("Uhodnul jsi " + uhodnutychCisel + "/7 čísel.");
-    Console.WriteLine("Gratuluji, vyhrál jsi Sportku o 1 milión Kč!\n\nPress any key to continue . . .");
-    Console.ReadKey();
-}
-else if (uhodnutychCisel <= 3 && uhodnutychCisel >= 0)
-{
-    Console.Clear();
-    Console.WriteLine("Sportka\n=====================");
-    Console.WriteLine("Uhodnul jsi " + uhodnutychCisel + "/7 čísel.");
-    Console.WriteLine("Bohužel, prohrál jsi.\n\nPress any key to conntinue . . .");
-    Console.ReadKey();
+    else if (uhodnutychCisel <= 3 && uhodnutychCisel >= 0)
+    {
+        Console.Clear();
+        Console.WriteLine("Sportka\n=====================");
+        Console.WriteLine("Tipovaná čísla: " + String.Join(", ", tipovanaCisla));
+        Console.WriteLine("Výherní čísla: " + String.Join(", ", vyherneCisla));
+        Console.WriteLine("\nUhodnul jsi " + uhodnutychCisel + "/6 čísel.");
+        Console.WriteLine("Bohužel, prohrál jsi.\n\nChceš hrát znova? (a/n): ");
+        string odpoved = Console.ReadLine();
+        string converted_odpoved = odpoved.ToUpper();
+        if (converted_odpoved == "A")
+        {
+            opakovat = true;
+            Console.WriteLine("Spouštím ti novou hru...");
+            Console.Clear();
+        }
+        else if (converted_odpoved == "N")
+        {
+            opakovat = false;
+            Console.WriteLine("Vypínám hru...");
+            Console.Clear();
+        }
+    }
 }
